@@ -6,6 +6,7 @@ public class Student {
     private int xPos, yPos;
     private final int WIDTH = 85;
     private final int HEIGHT = 50;
+    private boolean active;
 
     public Student(String studentName){
         xPos = 50;
@@ -16,26 +17,24 @@ public class Student {
     public void setX(int xPos){
         this.xPos = xPos;
     }
-
     public int getX(){
         return xPos;
     }
-
     public void setY(int yPos){
         this.yPos = yPos;
     }
-
     public int getY(){
         return yPos;
     }
-
     public int getWidth(){
         return WIDTH;
     }
-
     public int getHeight(){
         return HEIGHT;
     }
+    public boolean isClicked(){return active;}
+    public void hasBeenClicked(){active = true;}
+    public void hasBeenUnclicked(){active = false;}
 
     public void paint(Graphics g){
         g.setColor(new Color(208, 182, 146));
