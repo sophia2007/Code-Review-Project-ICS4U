@@ -14,6 +14,9 @@ public class Student {
         name = studentName;
     }
 
+    public String getName(){
+        return name;
+    }
     public void setX(int xPos){
         this.xPos = xPos;
     }
