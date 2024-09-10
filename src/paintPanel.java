@@ -1,11 +1,8 @@
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.util.*;
 
 public class paintPanel extends JPanel implements ActionListener, MouseListener, MouseMotionListener{
-
-    ArrayList<Student> students = new ArrayList<Student>();
 
     public paintPanel(){
         setBackground(new Color(50, 72, 56));
@@ -25,7 +22,8 @@ public class paintPanel extends JPanel implements ActionListener, MouseListener,
 
     @Override
     public void mousePressed(MouseEvent e) {
-        for (Student s: students){
+        for (int i = 0; i < SeatingPlanTool.listModel.getSize(); i++){
+            Student s = SeatingPlanTool.listModel.getElementAt(i);
             if (s.isClicked()){
                 moveStudent(s, e.getX(), e.getY());
             }
@@ -34,7 +32,8 @@ public class paintPanel extends JPanel implements ActionListener, MouseListener,
 
     @Override
     public void mouseDragged(MouseEvent e) {
-        for (Student s: students){
+        for (int i = 0; i < SeatingPlanTool.listModel.getSize(); i++){
+            Student s = SeatingPlanTool.listModel.getElementAt(i);
             if (s.isClicked()){
                 moveStudent(s, e.getX(), e.getY());
             }
@@ -43,7 +42,8 @@ public class paintPanel extends JPanel implements ActionListener, MouseListener,
 
     @Override
     public void mouseClicked(MouseEvent e) {
-        for (Student s: students){
+        for (int i = 0; i < SeatingPlanTool.listModel.getSize(); i++){
+            Student s = SeatingPlanTool.listModel.getElementAt(i);
             if (
                     e.getX() > s.getX() &&
                     e.getX() < (s.getX() + s.getWidth()) &&
@@ -94,7 +94,11 @@ public class paintPanel extends JPanel implements ActionListener, MouseListener,
     public void paintComponent(Graphics g){
         super.paintComponent(g);
 
-        for (Student s : students) {s.paint(g);}
+        for (int i = 0; i < SeatingPlanTool.listModel.getSize(); i++){
+            Student s = SeatingPlanTool.listModel.getElementAt(i);
+            System.out.println("Painted "+s);
+            s.paint(g);
+        }
     }
 
     // Unused methods from MouseListener and MouseMotionListener:

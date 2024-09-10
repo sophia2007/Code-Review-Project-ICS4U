@@ -11,9 +11,8 @@ public class SeatingPlanTool extends JFrame implements ActionListener, ListSelec
 
     private JScrollPane scrollPane;
 
-    private DefaultListModel<Student> listModel;
-    private JList<Student> list;
-    private int listIndex;
+    public static DefaultListModel<Student> listModel;
+    private JList<Student> studentList;
     private JTextField textField;
     private JButton deleteBtn;
 
@@ -27,18 +26,18 @@ public class SeatingPlanTool extends JFrame implements ActionListener, ListSelec
 
         // in bottom component:
         listModel = new DefaultListModel<>();
-        list = new JList<>(listModel);
-        list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        list.setSelectedIndex(0);
-        list.addListSelectionListener(this); // Add a list selection listener that triggers everytime a cell is selected
-        list.setVisibleRowCount(10);         // Set the list to have 10 rows visible at a time
-        scrollPane = new JScrollPane(list);  // allow textArea to be scrollable
+        studentList = new JList<>(listModel);
+        studentList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        studentList.setSelectedIndex(0);
+        studentList.addListSelectionListener(this);    // Add a list selection listener that triggers everytime a cell is selected
+        studentList.setVisibleRowCount(5);             // Set the list to have 10 rows visible at a time
+        scrollPane = new JScrollPane(studentList);     // allow the list to be scrollable
 
-        inputPanel = new JPanel();           // separate panel to form the layout of the input section
-        textField = new JTextField();        // allow user to add the student name
+        inputPanel = new JPanel();              // separate panel to form the layout of the input section
+        textField = new JTextField();           // allow user to add the student name
         textField.addActionListener(this);
         textField.setActionCommand("add");
-        deleteBtn = new JButton();           // allow user to delete any student name
+        deleteBtn = new JButton("Delete"); // allow user to delete any student name
         deleteBtn.addActionListener(this);
         deleteBtn.setActionCommand("delete");
 
@@ -58,22 +57,23 @@ public class SeatingPlanTool extends JFrame implements ActionListener, ListSelec
 
         // configuring splitPane
         splitPane.setOrientation(JSplitPane.VERTICAL_SPLIT);  // we want it to split the window verticaly
-        splitPane.setDividerLocation(200);                    // the initial position of the divider is 200 (our window is 400 pixels high)
+        splitPane.setDividerLocation(500);                    // the initial position of the divider
         splitPane.setTopComponent(topPanel);                  // at the top we want our "topPanel"
         splitPane.setBottomComponent(bottomPanel);
 
         // topPanel's configuration is done in paintPanel
         // bottomPanel's configuration:
         bottomPanel.setLayout(new BoxLayout(bottomPanel,
-                BoxLayout.Y_AXIS));         // BoxLayout.Y_AXIS will arrange the content vertically
-        bottomPanel.add(scrollPane);        // add the scrollPane first, making it on the top
-        bottomPanel.add(inputPanel);        // the inputPanel is added second, so it under the studentAddedTextArea
+                BoxLayout.Y_AXIS));                         // BoxLayout.Y_AXIS will arrange the content vertically
+        bottomPanel.add(new JLabel("Your Students"));  // this JLabel is added first, making it on the top
+        bottomPanel.add(scrollPane);
+        bottomPanel.add(inputPanel);
 
         // configuring inputPanel
-        inputPanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, 75));    // set the max height to 75 and the max width to (almost) unlimited
-        inputPanel.setLayout(new BoxLayout(this, BoxLayout.X_AXIS));        // X_Axis will arrange the content horizontally
+        inputPanel.setMaximumSize(new Dimension(900, 75));    // set the max height to 75 and the max width to (almost) unlimited
+        inputPanel.setLayout(new BoxLayout(inputPanel, BoxLayout.X_AXIS));         // X_Axis will arrange the content horizontally
         inputPanel.add(textField);                                                 // textField added first and so is on the left
-        inputPanel.add(deleteBtn);                                                // button is added second and so is on the right
+        inputPanel.add(deleteBtn);                                                 // button is added second and so is on the right
 
         this.pack(); // pack() applies all the layout and sizes that has been set before they are displayed
     }
@@ -84,18 +84,20 @@ public class SeatingPlanTool extends JFrame implements ActionListener, ListSelec
             String text = textField.getText();
             if (!hasName(text)){
                 listModel.addElement(new Student(text));
-                listIndex++;
+                System.out.println("Added "+text);
+                textField.setText("");
             } else {
-                // ERROR MESSAGE
+                JOptionPane.showMessageDialog(new JFrame(), "That student is already added! (If there's two students with the same name, use their initials.)");
             }
         }
 
         if (e.getActionCommand().equals("delete")){
-
+            listModel.remove(studentList.getSelectedIndex());
         }
 
-        list.ensureIndexIsVisible(listModel.size()-1);
-        list.repaint();
+        studentList.ensureIndexIsVisible(listModel.size());
+        studentList.repaint();
+        topPanel.repaint();
     }
 
     private boolean hasName(String newName){

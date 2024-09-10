@@ -14,9 +14,7 @@ public class Student {
         name = studentName;
     }
 
-    public String getName(){
-        return name;
-    }
+    public String getName(){return name;}
     public void setX(int xPos){
         this.xPos = xPos;
     }
@@ -39,8 +37,14 @@ public class Student {
     public void hasBeenClicked(){active = true;}
     public void hasBeenUnclicked(){active = false;}
 
+    public String toString(){return name;}
+
     public void paint(Graphics g){
-        g.setColor(new Color(208, 182, 146));
+        if (isClicked()){
+            g.setColor(new Color(133, 220, 46));
+        } else {
+            g.setColor(new Color(208, 182, 146));
+        }
         g.fillRect(xPos,yPos,WIDTH,HEIGHT);
         g.setColor(Color.BLACK);
         g.drawRect(xPos,yPos,WIDTH,HEIGHT);
