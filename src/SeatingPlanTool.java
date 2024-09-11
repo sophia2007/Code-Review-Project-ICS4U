@@ -1,11 +1,9 @@
 import javax.swing.*;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class SeatingPlanTool extends JFrame implements ActionListener, ListSelectionListener {
+public class SeatingPlanTool extends JFrame implements ActionListener{
     private JPanel topPanel, bottomPanel, inputPanel;
     private JSplitPane splitPane;
 
@@ -29,7 +27,6 @@ public class SeatingPlanTool extends JFrame implements ActionListener, ListSelec
         studentList = new JList<>(listModel);
         studentList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         studentList.setSelectedIndex(0);
-        studentList.addListSelectionListener(this);    // Add a list selection listener that triggers everytime a cell is selected
         studentList.setVisibleRowCount(5);             // Set the list to have 10 rows visible at a time
         scrollPane = new JScrollPane(studentList);     // allow the list to be scrollable
 
@@ -56,8 +53,8 @@ public class SeatingPlanTool extends JFrame implements ActionListener, ListSelec
         this.getContentPane().add(splitPane);              // splitPane is the only component added to the window itself
 
         // configuring splitPane
-        splitPane.setOrientation(JSplitPane.VERTICAL_SPLIT);  // we want it to split the window verticaly
-        splitPane.setDividerLocation(500);                    // the initial position of the divider
+        splitPane.setOrientation(JSplitPane.VERTICAL_SPLIT);  // we want it to split the window vertically
+        splitPane.setDividerLocation(600);                    // the initial position of the divider
         splitPane.setTopComponent(topPanel);                  // at the top we want our "topPanel"
         splitPane.setBottomComponent(bottomPanel);
 
@@ -65,7 +62,9 @@ public class SeatingPlanTool extends JFrame implements ActionListener, ListSelec
         // bottomPanel's configuration:
         bottomPanel.setLayout(new BoxLayout(bottomPanel,
                 BoxLayout.Y_AXIS));                         // BoxLayout.Y_AXIS will arrange the content vertically
-        bottomPanel.add(new JLabel("Your Students"));  // this JLabel is added first, making it on the top
+        JLabel label = new JLabel("Your Students");
+        //label.setMinimumSize(new Dimension(900, 20));
+        bottomPanel.add(label);  // this JLabel is added first, making it on the top
         bottomPanel.add(scrollPane);
         bottomPanel.add(inputPanel);
 
@@ -73,6 +72,7 @@ public class SeatingPlanTool extends JFrame implements ActionListener, ListSelec
         inputPanel.setMaximumSize(new Dimension(900, 75));    // set the max height to 75 and the max width to (almost) unlimited
         inputPanel.setLayout(new BoxLayout(inputPanel, BoxLayout.X_AXIS));         // X_Axis will arrange the content horizontally
         inputPanel.add(textField);                                                 // textField added first and so is on the left
+        textField.setMinimumSize(new Dimension(100, 30));
         inputPanel.add(deleteBtn);                                                 // button is added second and so is on the right
 
         this.pack(); // pack() applies all the layout and sizes that has been set before they are displayed
@@ -87,7 +87,9 @@ public class SeatingPlanTool extends JFrame implements ActionListener, ListSelec
                 System.out.println("Added "+text);
                 textField.setText("");
             } else {
-                JOptionPane.showMessageDialog(new JFrame(), "That student is already added! (If there's two students with the same name, use their initials.)");
+                JOptionPane.showOptionDialog(new JFrame(), "That student is already added!" +
+                        "\n(If there's two students with the same name, use their initials.)", "Oops!",
+                        JOptionPane.OK_CANCEL_OPTION, JOptionPane.ERROR_MESSAGE, null, null, null);
             }
         }
 
@@ -108,10 +110,5 @@ public class SeatingPlanTool extends JFrame implements ActionListener, ListSelec
             }
         }
         return false;
-    }
-
-    @Override
-    public void valueChanged(ListSelectionEvent e) {
-
     }
 }
