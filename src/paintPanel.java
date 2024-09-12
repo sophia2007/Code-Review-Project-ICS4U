@@ -39,6 +39,7 @@ public class paintPanel extends JPanel implements ActionListener, MouseListener,
 
     @Override
     public void mousePressed(MouseEvent e) {
+        // if mouse presses a student that is already selected, move the student with the mouse
         for (int i = 0; i < SeatingPlanTool.listModel.getSize(); i++){
             Student s = SeatingPlanTool.listModel.getElementAt(i);
             if (s.getShape().contains(e.getX(), e.getY()) && s.isClicked()){
@@ -50,6 +51,7 @@ public class paintPanel extends JPanel implements ActionListener, MouseListener,
 
     @Override
     public void mouseDragged(MouseEvent e) {
+        // if mouse is dragging a student that is already selected, move the student with the mouse
         for (int i = 0; i < SeatingPlanTool.listModel.getSize(); i++){
             Student s = SeatingPlanTool.listModel.getElementAt(i);
             if (s.isClicked()){
@@ -61,6 +63,8 @@ public class paintPanel extends JPanel implements ActionListener, MouseListener,
 
     @Override
     public void mouseClicked(MouseEvent e) {
+        // if mouse clicks a student that isn't already selected,
+        // select that student and unselect all other students
         for (int i = 0; i < SeatingPlanTool.listModel.getSize(); i++){
             Student s = SeatingPlanTool.listModel.getElementAt(i);
             if (s.getShape().contains(e.getX(), e.getY())) {
@@ -73,22 +77,27 @@ public class paintPanel extends JPanel implements ActionListener, MouseListener,
 
     @Override
     public void actionPerformed(ActionEvent e) {
+        // triggers when the Settings button is clicked
+        // shows a JOptionPane that lets the user choose their classroom layout
         chosenLayout = JOptionPane.showInputDialog(null,
                 "What is the layout of your classroom's seating?", "Classroom Layout",
                 JOptionPane.INFORMATION_MESSAGE, null,
                 layoutNames, layoutNames[0]);
+        // clears the student list everytime the layout is changed
         SeatingPlanTool.listModel.clear();
+        // triggers paintComponent to display the newly selected layout
         repaint();
     }
 
     public void paintComponent(Graphics g){
         super.paintComponent(g);
 
-        if (!chosenLayout.equals("")){
+        if (!chosenLayout.equals("")){ // paints the chosen layout
             int i = Arrays.asList(layoutNames).indexOf(chosenLayout);
             g.drawImage(layouts[i], 0, 0, this);
         }
 
+        // paint the student rectangles
         for (int i = 0; i < SeatingPlanTool.listModel.getSize(); i++){
             Student s = SeatingPlanTool.listModel.getElementAt(i);
             s.paint(g);

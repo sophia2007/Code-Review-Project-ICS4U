@@ -78,15 +78,16 @@ public class SeatingPlanTool extends JFrame implements ActionListener{
         this.pack(); // pack() applies all the layout and sizes that has been set before they are displayed
     }
 
+    // takes care of what happens after the user interact with the textfield or the delete button
     @Override
     public void actionPerformed(ActionEvent e) {
-        if (e.getActionCommand().equals("add")){
+
+        if (e.getActionCommand().equals("add")){ // triggers when the user presses ENTER in the text field
             String text = textField.getText();
-            if (!hasName(text)){
-                listModel.addElement(new Student(text));
-                System.out.println("Added "+text);
-                textField.setText("");
-            } else {
+            if (!hasName(text)){                         // if the newly added student name isn't always in the list
+                listModel.addElement(new Student(text)); // add the student
+                textField.setText("");                   // clears the text field
+            } else { // tells the user they can't add two identical names
                 JOptionPane.showOptionDialog(new JFrame(), "That student is already added!" +
                         "\n(If there's two students with the same name, use their initials.)", "Oops!",
                         JOptionPane.OK_CANCEL_OPTION, JOptionPane.ERROR_MESSAGE, null, null, null);
